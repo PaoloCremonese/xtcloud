@@ -1,0 +1,73 @@
+version: "2"
+
+services:
+  app:
+    container_name: "xtcloud"
+    image: "paolocremonese/wf-9.0.2.final:scndtry"
+    environment:
+      - WILDFLY_USER=admin
+      - WILDFLY_PASS=cremonese
+      - DB_NAME=telecloud
+      - DB_USER=adminjrSz1hq
+      - DB_PASS=uQx2ENIP471r
+      - DB_URI=db:3306
+      - OPENSHIFT_REPO_DIR=/opt/jboss/wildfly/standalone/lib/ext/
+      - OPENSHIFT_MYSQL_DATASOURCE=telecloudDatasource
+      - MYSQL_TCP_ADDR=172.20.0.2
+      - MYSQL_TCP_PORT=3306
+    depends_on:
+      - db
+    volumes:
+      - /home/paolo/WebApplications/TeleCLOUD/xtcloud/userconfig/:/opt/jboss/userconfig/       # persistent data storage for user.config
+      - /home/paolo/WebApplications/TeleCLOUD/xtcloud/clouddata/:/opt/jboss/installer/         # persistent data storage for TeleCloud-OFFLINE
+    ports:
+      - "8080:8080" # application
+      - "8443:8443" # application SSL HTTPS
+      - "9990:9990" # admin console
+
+  db:
+    container_name: "db"
+    image: "mysql:5.7"
+    environment:
+      - MYSQL_DATABASE=telecloud
+      - MYSQL_USER=adminjrSz1hq
+      - MYSQL_PASSWORD=uQx2ENIP471r
+      - MYSQL_ROOT_PASSWORD=root
+    volumes:
+#      - ./workdir/db/init/:/docker-entrypoint-initdb.d/ # init database
+      - /home/paolo/WebApplications/TeleCLOUD/xtcloud/mysqldata/:/var/lib/mysql/              # data storage
+    ports:
+      - "3306:3306"
+
+  backup:
+    container_name: "xt-backup"
+    image: databack/mysql-backup
+    restart: always
+    user: "0"
+    volumes:
+      - /home/paolo/WebApplications/TeleCLOUD/xtcloud/mysqlbkp/:/db/                          # database BACKUP
+      - /home/paolo/WebApplications/TeleCLOUD/xtcloud/scripts.d/pre-backup/:/scripts.d/pre-backup/             # PREBACKUP script
+      - /home/paolo/WebApplications/TeleCLOUD/xtcloud/scripts.d/post-backup/:/scripts.d/post-backup/           # POSTBACKUP script
+    environment:
+      - DB_DUMP_TARGET=/db 
+      - DB_USER=adminjrSz1hq
+      - DB_PASS=uQx2ENIP471r
+      - DB_DUMP_BEGIN=0930                          # warning, use GMT time !!!
+      - DB_SERVER=db
+      - DB_DUMP_DEBUG=true
+    depends_on:
+      - db
+      - app
+    
+#networks:
+#    default:
+#        driver: bridge
+   
+networks:
+    default:
+        driver: bridge
+        ipam:
+            config:
+              - subnet: 172.20.0.0/24
+                gateway: 172.20.0.1
+        
