@@ -3,7 +3,7 @@ version: "2"
 services:
   app:
     container_name: "xtcloud"
-    image: "paolocremonese/wf-9.0.2.final:thirdtry"
+    image: "paolocremonese/wf-9.0.2.final:xtcloud"
     environment:
       - WILDFLY_USER=admin
       - WILDFLY_PASS=cremonese
