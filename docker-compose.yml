@@ -26,7 +26,7 @@ services:
       - "8443:8443" # application SSL HTTPS
       - "9990:9990" # admin console
     networks:
-      scloud-net: 
+      xtcloud-net: 
         ipv4_address: 172.20.0.3
 
   db:
@@ -44,7 +44,7 @@ services:
 #      - "3306:3306"
       - "127.0.0.1:3306:3306"         # per evitare di esporre esternamente la porta di mysql
     networks:
-      scloud-net: 
+      xtcloud-net: 
         ipv4_address: 172.20.0.2
 
   backup:
@@ -67,7 +67,7 @@ services:
       - db
       - app
     networks:
-      scloud-net: 
+      xtcloud-net: 
         ipv4_address: 172.20.0.4
     
 #networks:
@@ -75,10 +75,10 @@ services:
 #        driver: bridge
    
 networks:
-    default:
-        driver: bridge
-        ipam:
-            config:
-              - subnet: 172.20.0.0/24
-                gateway: 172.20.0.1
+  xtcloud-net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24
+          gateway: 172.20.0.1
         
