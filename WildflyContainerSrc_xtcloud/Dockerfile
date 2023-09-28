@@ -23,9 +23,11 @@ RUN cd /opt/jboss/wildfly/modules/ \
 # ADD standaloneTELECLOUD.xml /opt/jboss/wildfly/standalone/configuration
 ADD standalone.xml /opt/jboss/wildfly/standalone/configuration
 ADD telecloudRealm.properties /opt/jboss/wildfly/standalone/configuration
+ADD ateisRealm.properties /opt/jboss/wildfly/standalone/configuration
 # ADD teledata.website.key /opt/jboss/wildfly/standalone/configuration
 ADD teledata.website.keystore /opt/jboss/wildfly/standalone/configuration
 ADD libTeledataONEcfgIF.so /opt/jboss/wildfly/standalone/lib/ext
+ADD libTeledataONEcfgIF_3.so /opt/jboss/wildfly/standalone/lib/ext
 
 ADD mysql/main/module.xml  /opt/jboss/wildfly/modules/system/layers/base/com/mysql/main
 ADD mysql/main/mysql-connector-java-5.1.38-bin.jar /opt/jboss/wildfly/modules/system/layers/base/com/mysql/main
@@ -38,6 +40,7 @@ ADD chmstampa.sh /opt/jboss
 
 ADD hello.war /opt/jboss/wildfly/standalone/deployments
 ADD TeleCloudONE.war /opt/jboss/wildfly/standalone/deployments
+ADD TeleCloudBeta.war /opt/jboss/wildfly/standalone/deployments
 
 USER root
 
