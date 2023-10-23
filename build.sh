@@ -12,7 +12,7 @@ docker compose down
 # 2.  supposing all the files has been placed in the right place, build the container
 echo "Build Wildfly"
 cd /home/teledata/xtcloud/WildflyContainerSrc_xtcloud
-docker build paolocremonese/wf-9.0.2.final:xtcloud .
+docker build --tag paolocremonese/wf-9.0.2.final:xtcloud .
 
 # 3.  start the container again
 echo "Start containers again"
